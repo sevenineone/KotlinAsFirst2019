@@ -245,7 +245,7 @@ fun factorizeToString(n: Int): String {
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> {
+fun convert(n: Int, base: Int): List<Int> { // reverse???
     var a = n
     var r = 0
     var ans = mutableListOf<Int>()
@@ -268,7 +268,17 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val list = convert(n, base)
+    var ans = ""
+    for (i in list) {
+        if (i < 10)
+            ans += i.toString()
+        else
+            ans += ('a' + i - 10).toString() // ascii
+    }
+    return ans
+}
 
 /**
  * Средняя
@@ -277,7 +287,16 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var ans = 0
+    val list = digits.reversed()
+    var c = 1
+    for (i in list) {
+        ans += i * c
+        c *= base
+    }
+    return ans
+}
 
 /**
  * Сложная
