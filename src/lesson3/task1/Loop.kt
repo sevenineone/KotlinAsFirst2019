@@ -22,7 +22,7 @@ fun factorial(n: Int): Double {
 /**
  * Тута я написал функцию gcd (Алгоритм Евклида) для поиска lcm.
  */
-fun gcd(n: Int, m: Int): Int = if(m == 0) n else gcd(m, n % m)
+fun gcd(n: Int, m: Int): Int = if (m == 0) n else gcd(m, n % m)
 
 /**
  * Пример
@@ -75,13 +75,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    if(n == 0) return 1
+    if (n == 0) return 1
     var count: Int = 0
     var num: Int = n
-    while(num > 0)
-    {
+    while (num > 0) {
         num /= 10
-        count ++
+        count++
     }
     return count
 }
@@ -92,10 +91,10 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int{
-    if(n < 3)
+fun fib(n: Int): Int {
+    if (n < 3)
         return 1
-    return fib(n-1) + fib(n-2)
+    return fib(n - 1) + fib(n - 2)
 
 }
 
@@ -105,7 +104,7 @@ fun fib(n: Int): Int{
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int) = m / gcd(m,n) * n
+fun lcm(m: Int, n: Int) = m / gcd(m, n) * n
 
 /**
  * Простая
@@ -114,7 +113,7 @@ fun lcm(m: Int, n: Int) = m / gcd(m,n) * n
  */
 fun minDivisor(n: Int): Int {
     var i = 2
-    while(n % i != 0) i++
+    while (n % i != 0) i++
     return i
 }
 
@@ -124,8 +123,8 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var i = n/2
-    while(n % i != 0) i--
+    var i = n / 2
+    while (n % i != 0) i--
     return i
 }
 
@@ -145,13 +144,12 @@ fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean{  // её циклами надо было или как?
+fun squareBetweenExists(m: Int, n: Int): Boolean {  // её циклами надо было или как?
     var kn = sqrt(n.toDouble()).toInt()
     var km = sqrt(m.toDouble()).toInt()
     return kn > km || sqr(kn) == n || sqr(km) == m
 
 }
-
 
 
 /**
@@ -173,8 +171,8 @@ fun squareBetweenExists(m: Int, n: Int): Boolean{  // её циклами над
 fun collatzSteps(x: Int): Int {
     var t = x
     var count = 0
-    while(t != 1){
-        if(t % 2 == 0)
+    while (t != 1) {
+        if (t % 2 == 0)
             t /= 2
         else
             t = t * 3 + 1
@@ -244,16 +242,16 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int{
+fun squareSequenceDigit(n: Int): Int {
     var number = 1
     var digits = 0
     var last = 0
-    while(digits < n){
+    while (digits < n) {
         last = number * number
         digits += digitNumber(last)
         number++
     }
-    while(n != digits){
+    while (n != digits) {
         last /= 10
         digits--
     }
@@ -270,18 +268,18 @@ fun squareSequenceDigit(n: Int): Int{
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    if(n < 3) return 1
+    if (n < 3) return 1
     var n1 = 1
     var n2 = 1
     var digits = 2
     var last = 0
-    while(digits < n){
+    while (digits < n) {
         last = n1 + n2
         digits += digitNumber(last)
         n1 = n2
         n2 = last
     }
-    while(n != digits){
+    while (n != digits) {
         last /= 10
         digits--
     }
