@@ -310,10 +310,10 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int{
+fun decimalFromString(str: String, base: Int): Int {
     var ans = mutableListOf<Int>()
-    for(i in str.reversed()){
-        if(i.isDigit()) ans.add(i.toInt())
+    for (i in str.reversed()) {
+        if (i.isDigit()) ans.add(i.toInt())
         else ans.add(i.toInt() - 'a'.toInt() + 10)  // c 3 1 // 12
     }
     return decimal(ans.toList(), base)
