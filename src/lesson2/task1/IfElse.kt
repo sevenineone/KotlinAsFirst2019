@@ -88,6 +88,7 @@ fun timeForHalfWay(t1: Double, v1: Double, t2: Double, v2: Double, t3: Double, v
     }
 
 }
+
 /**
  * Простая
  *
@@ -149,7 +150,7 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if(a + b < c || b + c < a || a + c < b)
+    return if (a + b < c || b + c < a || a + c < b)
         -1
     else when {
         (a * a + b * b == c * c || a * a + c * c == b * b || b * b + c * c == a * a) -> 1
