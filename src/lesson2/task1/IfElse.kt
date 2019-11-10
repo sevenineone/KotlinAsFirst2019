@@ -99,8 +99,8 @@ fun timeForHalfWay(t1: Double, v1: Double, t2: Double, v2: Double, t3: Double, v
  * Считать, что ладьи не могут загораживать друг друга
  */
 fun whichRookThreatens(kingX: Int, kingY: Int, rookX1: Int, rookY1: Int, rookX2: Int, rookY2: Int): Int {
-    var ans = 0;
-    var t = false;
+    var ans = 0
+    var t = false
     if (kingX == rookX1 || kingY == rookY1) {
         ans = 1
         t = true
@@ -128,8 +128,8 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    var ans: Int = 0;
-    var t: Boolean = false;
+    var ans = 0
+    var t = false
     if (kingX == rookX || kingY == rookY) {
         ans = 1
         t = true
