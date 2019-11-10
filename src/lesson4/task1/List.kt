@@ -3,10 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import lesson1.task1.sqr
 import lesson3.task1.minDivisor
 import kotlin.math.sqrt
-import javax.management.Query.div
 
 
 /**
@@ -247,8 +245,8 @@ fun factorizeToString(n: Int): String {
  */
 fun convert(n: Int, base: Int): List<Int> { // reverse???
     var a = n
-    var r = 0
-    var ans = mutableListOf<Int>()
+    var r: Int
+    val ans = mutableListOf<Int>()
     while (a > 0) {
         r = a % base
         ans.add(0, r)
@@ -311,12 +309,16 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var ans = mutableListOf<Int>()
+    var ans = 0
+    var num: Int
+    var c = 1
     for (i in str.reversed()) {
-        if (i.isDigit()) ans.add(i.toInt())
-        else ans.add(i.toInt() - 'a'.toInt() + 10)  // c 3 1 // 12
+        if (i.isDigit()) num = i.toInt() - '0'.toInt()
+        else num = i.toInt() - 'a'.toInt() + 10 // c 3 1 // 12
+        ans += num * c
+        c *= base
     }
-    return decimal(ans.toList(), base)
+    return ans
 }
 
 /**
@@ -327,7 +329,19 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val rom_table = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val digit_table = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    var ans = ""
+    var N = n
+    for (i in 0..12) {
+        while (digit_table[i] <= N) {
+            N -= digit_table[i]
+            ans += rom_table[i]
+        }
+    }
+    return ans
+}
 
 /**
  * Очень сложная
@@ -336,4 +350,88 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val table_1_to_9 = listOf(
+        "",
+        "один",
+        "два",
+        "три",
+        "четыре",
+        "пять",
+        "шесть",
+        "семь",
+        "восемь",
+        "девять"
+    )
+    val table_of_hundreds = listOf(
+        "",
+        "сто ",
+        "двести ",
+        "триста ",
+        "четыреста ",
+        "пятьсот ",
+        "шестьсот ",
+        "семьсот ",
+        "восемьсот ",
+        "девятьсот "
+    )
+    val table_10_to_19 = listOf(
+        "десять ",
+        "одиннадать ",
+        "двенадцать ",
+        "тринадцать ",
+        "четырнадцать ",
+        "пятнадцать ",
+        "шестнадцать ",
+        "семнадцать ",
+        "восемнадцать ",
+        "девятнадцать "
+    )
+    val table_20_to_90 = listOf(
+        "",
+        "",
+        "двадцать ",
+        "тридцать ",
+        "сорок ",
+        "пятдесят ",
+        "шестьдесят ",
+        "семьдесят ",
+        "восемдесят ",
+        "девяносто "
+    )
+    val table_of_thousands = listOf(
+        "тысяч ",
+        "одна тысяча ",
+        "две тысячи ",
+        "три тысячи ",
+        "четыре тысячи ",
+        "пять тысяч ",
+        "шесть тысяч ",
+        "семь тысяч ",
+        "восемь тысяч ",
+        "девять тысяч "
+    )
+
+    val digits = mutableListOf(0, 0, 0, 0, 0, 0)
+    var ans = ""
+    var i = 5
+    var N = n
+    while (N > 0) {
+        digits[i] = N % 10
+        N /= 10
+        i--
+    }
+
+    if (n >= 1000)
+        if (digits[1] == 1)
+            ans = ans + table_of_hundreds[digits[0]] + table_10_to_19[digits[2]] + table_of_thousands[0]
+        else
+            ans = ans + table_of_hundreds[digits[0]] + table_20_to_90[digits[1]] + table_of_thousands[digits[2]]
+
+    if (digits[4] == 1)
+        ans = ans + table_of_hundreds[digits[3]] + table_10_to_19[digits[5]]
+    else
+        ans = ans + table_of_hundreds[digits[3]] + table_20_to_90[digits[4]] + table_1_to_9[digits[5]]
+
+    return ans.trim()
+}
