@@ -92,7 +92,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var ans = mutableMapOf<Int, List<String>>()
+    val ans = mutableMapOf<Int, List<String>>()
     for ((name, grade) in grades)
         ans[grade] = ans.getOrDefault(grade, listOf()) + name
     return ans
@@ -108,8 +108,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean{
-    for ((s1,s2) in a)
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for ((s1, s2) in a)
         if (s2 != b[s1]) return false
     return true
 }
@@ -129,8 +129,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean{
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit{
-    for ((s1,s2) in b)
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
+    for ((s2, s1) in b)
         if (s2 == a[s1]) a.remove(s1)
 }
 
@@ -160,7 +160,12 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val both = mutableMapOf<String, String>()
+    for ((s1, s2) in mapB)
+        if (s1 in mapA && s2 != mapA[s1]) both += Pair(s1, mapA[s1] + ", " + s2)
+    return mapA + mapB + both
+}
 
 /**
  * Средняя
@@ -172,7 +177,17 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val all_price = mutableMapOf<String, Double>()
+    val number = mutableMapOf<String, Double>()
+    val ans = mutableMapOf<String, Double>()
+    for ((name, price) in stockPrices) {
+        all_price[name] = all_price.getOrDefault(name, 0.0) + price
+        number[name] = number.getOrDefault(name, 0.0) + 1
+    }
+    for ((name, price) in all_price) ans[name] = price / number[name]!!
+    return ans
+}
 
 /**
  * Средняя
@@ -189,7 +204,19 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var ans: String? = null
+    var minVal = Double.MAX_VALUE
+    for ((name, pair) in stuff) {
+        if (pair.first == kind) {
+            if (pair.second < minVal) {
+                minVal = pair.second
+                ans = name
+            }
+        }
+    }
+    return ans
+}
 
 /**
  * Средняя
@@ -270,7 +297,15 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var ans = Pair(-1, -1)
+    for (i in 0 until list.size - 1)
+        for (j in i + 1 until list.size) {
+            if ((list[i] + list[j]) == number)
+                {ans = Pair(i, j); break}
+    }
+    return ans
+}
 
 /**
  * Очень сложная
@@ -293,4 +328,7 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String>{
+    TODO()
+}
+
