@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -301,9 +303,10 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var ans = Pair(-1, -1)
     for (i in 0 until list.size - 1)
         for (j in i + 1 until list.size) {
-            if ((list[i] + list[j]) == number)
-                {ans = Pair(i, j); break}
-    }
+            if ((list[i] + list[j]) == number) {
+                ans = Pair(i, j); break
+            }
+        }
     return ans
 }
 
@@ -328,7 +331,25 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String>{
-    TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    //мое решение задачи сделанное в 2016 году на Летней Олимпиадной Школе от МфТИ. Переписал с c++.
+    val ans = mutableSetOf<String>()
+    val rs_tbl = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    for (k in 1 until treasures.size + 1) {
+        for (m in 0 until capacity + 1) {
+            val pr = treasures.getValue(treasures.keys.elementAt(k - 1))
+            if (pr.first <= m)
+                rs_tbl[k][m] = max(rs_tbl[k - 1][m - pr.first] + pr.second, rs_tbl[k - 1][m])
+            else rs_tbl[k][m] = rs_tbl[k - 1][m]
+        }
+    }
+    var mw = capacity
+    for (k in treasures.size downTo 1) {
+        if (rs_tbl[k - 1][mw] != rs_tbl[k][mw]) {
+            ans.add(treasures.keys.elementAt(k - 1))
+            mw -= treasures.getValue(treasures.keys.elementAt(k - 1)).first
+        }
+    }
+    return ans
 }
 
