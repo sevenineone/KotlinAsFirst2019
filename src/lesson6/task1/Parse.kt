@@ -2,6 +2,11 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.IllegalArgumentException
+import java.lang.NumberFormatException
+
+
 /**
  * Пример
  *
@@ -69,7 +74,29 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+val month = listOf(
+    "",
+    "января",
+    "Февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "агуста",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря"
+)
+
+fun dateStrToDigit(str: String): String {
+    val d = str.split(' ')
+    return if (d.size != 3 || d[1] !in month || d[0].toInt() > daysInMonth(month.indexOf(d[1]), d[2].toInt()))
+        ""
+    else
+        String.format("%02d.%02d.%d", d[0].toInt(), month.indexOf(d[1]), d[2].toInt())
+}
 
 /**
  * Средняя
@@ -81,7 +108,17 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val d = digital.split('.')
+    return try {
+        if (d.size != 3 || d[1].toInt() !in 1..12 || d[0].toInt() > daysInMonth(month.indexOf(d[1]), d[2].toInt()))
+            ""
+        else
+            String.format("%d %s %d", d[0].toInt(), month[d[1].toInt()], d[2].toInt())
+    } catch (e: NumberFormatException) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -97,7 +134,9 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String =
+    if (!phone.matches(Regex("""(\+)?[-0-9\s]+(\([-0-9\s]+\))?[-0-9\s]+"""))) ""
+    else Regex("""[-\s()]""").replace(phone, "")
 
 /**
  * Средняя
@@ -109,7 +148,17 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    return if (!jumps.matches(Regex("""[-0-9%\s]+""")) || !jumps.contains(Regex("""[0-9]"""))) -1
+    else {
+        val num = Regex("""[-%\s]+""").split(jumps)
+        var mx = -1
+        for (i in num) {
+            if (mx < i.toInt()) mx = i.toInt()
+        }
+        mx
+    }
+}
 
 /**
  * Сложная
@@ -120,9 +169,22 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Высота и соответствующие ей попытки разделяются пробелом.
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
- * вернуть -1.
+ * вернуть -1
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    return if (!jumps.matches(Regex("""[-+0-9%\s]+""")) || !jumps.contains(Regex("""[0-9]+\s\+""")))
+        -1
+    else {
+        val anss = Regex("""[0-9]+\s\+""").findAll(jumps).toList().map { it.value }
+        var mx = -1
+        for (i in anss) {
+            var s = i
+            s = s.replace(" +", "")
+            if (mx < s.toInt()) mx = s.toInt()
+        }
+        mx
+    }
+}
 
 /**
  * Сложная
@@ -133,7 +195,20 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (!expression.matches(Regex("""(([0-9]+\s[-+]\s)*)([0-9]+)""")))
+        throw IllegalArgumentException("Description")
+    else {
+        val numsWithSigns = expression.split(" ")
+        var ans = numsWithSigns[0].toInt()
+        for (i in 1 until numsWithSigns.size step 2) {
+            if (numsWithSigns[i] == "+") {
+                ans += numsWithSigns[i + 1].toInt()
+            } else ans -= numsWithSigns[i + 1].toInt()
+        }
+        return ans
+    }
+}
 
 /**
  * Сложная
@@ -208,4 +283,49 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (!commands.matches(Regex("""[-+<>\[\]\s]+"""))) throw IllegalArgumentException("Description")
+    var rightBracket = 0
+    var leftBracket = 0
+    for (i in commands) {
+        when (i) {
+            ']' -> rightBracket++
+            '[' -> leftBracket++
+        }
+    }
+    if (rightBracket != leftBracket) throw IllegalArgumentException("Description")
+    val conv = MutableList(cells) { 0 }
+    var position = cells / 2
+    var command = 0
+    var ttl = limit
+    val bracketQueue = mutableListOf<Int>()
+    fun findNextBracket(pstn: Int): Int {
+        var count = 1
+        var i = pstn
+        while ((count != 0) && (i < commands.length)) {
+            i++
+            when (commands[i]) {
+                '[' -> count++
+                ']' -> count--
+            }
+        }
+        return i
+    }
+    while ((ttl > 0) && (command < commands.length)) {
+        when (commands[command]) {
+            '<' -> position--
+            '>' -> position++
+            '+' -> conv[position]++
+            '-' -> conv[position]--
+            '[' -> if (conv[position] == 0) command = findNextBracket(command)
+            else bracketQueue.add(command)
+            ']' -> if (conv[position] != 0) command = bracketQueue.last()
+            else bracketQueue.remove(bracketQueue.last())
+        }
+        if ((command == -1)) throw IllegalArgumentException("Description")
+        if ((position < 0) || (position >= cells)) throw IllegalStateException("Description")
+        command++
+        ttl--
+    }
+    return conv
+}
