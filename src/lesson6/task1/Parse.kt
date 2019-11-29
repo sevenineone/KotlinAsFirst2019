@@ -287,19 +287,19 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!commands.matches(Regex("""[-+<>\[\]\s]+"""))) throw IllegalArgumentException("Description")
     var rightBracket = 0
     var leftBracket = 0
-    for (i in commands) {
+    for (i in commands) {  // счет количества скобок для проверки
         when (i) {
             ']' -> rightBracket++
             '[' -> leftBracket++
         }
     }
-    if (rightBracket != leftBracket) throw IllegalArgumentException("Description")
+    if (rightBracket != leftBracket) throw IllegalArgumentException("Description") // проверка на пары скобок
     val conv = MutableList(cells) { 0 }
     var position = cells / 2
     var command = 0
     var ttl = limit
-    val bracketQueue = mutableListOf<Int>()
-    fun findNextBracket(pstn: Int): Int {
+    val bracketQueue = mutableListOf<Int>() // для поочередного выполнения вложенных скобок
+    fun findNextBracket(pstn: Int): Int { // поиск закрывающей скобки
         var count = 1
         var i = pstn
         while ((count != 0) && (i < commands.length)) {
@@ -322,8 +322,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             ']' -> if (conv[position] != 0) command = bracketQueue.last()
             else bracketQueue.remove(bracketQueue.last())
         }
-        if ((command == -1)) throw IllegalArgumentException("Description")
         if ((position < 0) || (position >= cells)) throw IllegalStateException("Description")
+        //проверка на выход за границу конвеера
         command++
         ttl--
     }
