@@ -396,7 +396,7 @@ fun russian(n: Int): String {
         "пятдесят ",
         "шестьдесят ",
         "семьдесят ",
-        "восемдесят ",
+        "восемьдесят ",
         "девяносто "
     )
     val table_of_thousands = listOf(
