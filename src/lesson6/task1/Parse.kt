@@ -284,7 +284,7 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    if (!commands.matches(Regex("""[-+<>\[\]\s]+"""))) throw IllegalArgumentException("Description")
+    if (!commands.matches(Regex("""[-+<>\[\]\s]*"""))) throw IllegalArgumentException("Description")
     var rightBracket = 0
     var leftBracket = 0
     for (i in commands) {  // счет количества скобок для проверки
