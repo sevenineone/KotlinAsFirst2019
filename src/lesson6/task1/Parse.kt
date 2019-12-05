@@ -293,6 +293,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             '[' -> leftBracket++
         }
     }
+
     if (rightBracket != leftBracket) throw IllegalArgumentException("Description") // проверка на пары скобок
     val conv = MutableList(cells) { 0 }
     var position = cells / 2
