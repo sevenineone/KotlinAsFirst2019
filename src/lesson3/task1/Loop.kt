@@ -3,7 +3,6 @@
 package lesson3.task1
 
 import lesson1.task1.sqr
-import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 /**
@@ -76,8 +75,8 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     if (n == 0) return 1
-    var count: Int = 0
-    var num: Int = n
+    var count = 0
+    var num = n
     while (num > 0) {
         num /= 10
         count++
@@ -92,9 +91,16 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    if (n < 3)
-        return 1
-    return fib(n - 1) + fib(n - 2)
+    if (n == 1 || n == 2) return 1
+    var n0 = 0
+    var n1 = 1
+    var n2 = 1
+    for (i in 3..n) {
+        n0 = n1 + n2
+        n1 = n2
+        n2 = n0
+    }
+    return n0
 
 }
 
@@ -112,9 +118,12 @@ fun lcm(m: Int, n: Int) = m / gcd(m, n) * n
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var i = 2
-    while (n % i != 0) i++
-    return i
+    if (n % 2 == 0) return 2
+    else {
+        var i = 3
+        while (n % i != 0) i++
+        return i
+    }
 }
 
 /**
@@ -123,9 +132,7 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var i = n / 2
-    while (n % i != 0) i--
-    return i
+    return n / minDivisor(n)
 }
 
 /**
@@ -145,8 +152,8 @@ fun isCoPrime(m: Int, n: Int): Boolean = gcd(m, n) == 1
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {  // её циклами надо было или как?
-    var kn = sqrt(n.toDouble()).toInt()
-    var km = sqrt(m.toDouble()).toInt()
+    val kn = sqrt(n.toDouble()).toInt()
+    val km = sqrt(m.toDouble()).toInt()
     return kn > km || sqr(kn) == n || sqr(km) == m
 
 }
