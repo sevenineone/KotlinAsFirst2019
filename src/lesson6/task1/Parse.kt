@@ -285,17 +285,17 @@ fun fromRoman(roman: String): Int = TODO()
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!commands.matches(Regex("""[-+<>\[\]\s]*"""))) throw IllegalArgumentException("Description")
-    var rightBracket = 0
-    var leftBracket = 0
+    var c = 0
     for (i in commands) {  // счет количества скобок для проверки
         when (i) {
-            ']' -> rightBracket++
-            '[' -> leftBracket++
+            ']' -> c--
+            '[' -> c++
         }
+        if (c < 0) throw IllegalArgumentException("Description")
     }
 
-    if (rightBracket != leftBracket) throw IllegalArgumentException("Description") // проверка на пары скобок
-    val conv = MutableList(cells) { 0 }
+    if (c != 0) throw IllegalArgumentException("Description") // проверка на пары скобок
+    val con = MutableList(cells) { 0 }
     var position = cells / 2
     var command = 0
     var ttl = limit
@@ -312,15 +312,16 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         }
         return i
     }
+
     while ((ttl > 0) && (command < commands.length)) {
         when (commands[command]) {
             '<' -> position--
             '>' -> position++
-            '+' -> conv[position]++
-            '-' -> conv[position]--
-            '[' -> if (conv[position] == 0) command = findNextBracket(command)
+            '+' -> con[position]++
+            '-' -> con[position]--
+            '[' -> if (con[position] == 0) command = findNextBracket(command)
             else bracketQueue.add(command)
-            ']' -> if (conv[position] != 0) command = bracketQueue.last()
+            ']' -> if (con[position] != 0) command = bracketQueue.last()
             else bracketQueue.remove(bracketQueue.last())
         }
         if ((position < 0) || (position >= cells)) throw IllegalStateException("Description")
@@ -328,5 +329,5 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
         command++
         ttl--
     }
-    return conv
+    return con
 }
