@@ -75,10 +75,10 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val max_wall_size = maxOf(r, s)
-    val min_wall_size = minOf(r, s)
-    val min_brick_size = minOf(a, b, c)
-    val max_brick_size = maxOf(a, b, c)
-    val mid_brick_size = a + b + c - min_brick_size - max_brick_size
-    return (mid_brick_size <= max_wall_size) && (min_brick_size <= min_wall_size)
+    val maxWallSize = maxOf(r, s)
+    val minWallSize = minOf(r, s)
+    val minBrickSize = minOf(a, b, c)
+    val maxBrickSize = maxOf(a, b, c)
+    val midBrickSize = a + b + c - minBrickSize - maxBrickSize
+    return (midBrickSize <= maxWallSize) && (minBrickSize <= minWallSize)
 }
