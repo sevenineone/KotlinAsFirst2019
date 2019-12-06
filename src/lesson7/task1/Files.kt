@@ -58,13 +58,17 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val ans = mutableMapOf<String, Int>()
     var name = ""
     var place = 0
-    for (i in substrings) ans += Pair(i, 0)
+    for (i in substrings) ans += Pair(i, -1)
     for (i in substrings) {
-        name = i.toLowerCase()
-        place = text.indexOf(name, 0)
-        while (place != -1) {
-            ans[i] = ans.getOrDefault(i, 0) + 1
-            place = text.indexOf(name, place + 1)
+        if (ans[i] != -1) continue
+        else {
+            ans[i] = 0
+            name = i.toLowerCase()
+            place = text.indexOf(name, 0)
+            while (place != -1) {
+                ans[i] = ans.getOrDefault(i, 0) + 1
+                place = text.indexOf(name, place + 1)
+            }
         }
     }
     return ans
@@ -85,7 +89,25 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    
+    val outputStream = File(outputName).bufferedWriter()
+    val text = File(inputName).readText().toMutableList()
+    val trig = listOf('Ж', 'ж', 'Ч', 'ч', 'Ш', 'ш', 'Щ', 'щ')
+    val nextLetter = mapOf(
+        'ы' to 'и',
+        'Ы' to 'И',
+        'я' to 'а',
+        'Я' to 'А',
+        'ю' to 'у',
+        'Ю' to 'У'
+    )
+    var place = 0
+    for (i in 0 until text.size - 2) {
+        if (text[i] in trig){
+            text[i + 1] = nextLetter.getOrDefault(text[i + 1], text[i + 1])
+        }
+    }
+    outputStream.write(text.joinToString(""))
+    outputStream.close()
 }
 
 /**
