@@ -56,7 +56,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val text = File(inputName).readText().toLowerCase()
     val ans = mutableMapOf<String, Int>()
-    var name = ""
+    var name: String
     var place = 0
     for (i in substrings) ans += Pair(i, -1)
     for (i in substrings) {
@@ -100,9 +100,8 @@ fun sibilants(inputName: String, outputName: String) {
         'ю' to 'у',
         'Ю' to 'У'
     )
-    var place = 0
     for (i in 0 until text.size - 2) {
-        if (text[i] in trig){
+        if (text[i] in trig) {
             text[i + 1] = nextLetter.getOrDefault(text[i + 1], text[i + 1])
         }
     }
@@ -294,9 +293,62 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
+
+
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val text = File(inputName).readLines()
+    val outputStream = File(outputName).bufferedWriter()
+    val ans = mutableListOf<String>()
+    val queue = mutableListOf<Char>('0')
+    val trigs = mapOf("*" to 'i', "**" to 'b', "~~" to 's')
+    var trig = ""
+    var next = false
+    ans.add("<html><body><p>")
+    for (str in text) {
+        if (str.isEmpty()) {
+            ans.add("</p><p>")
+            continue
+        }
+        for (i in 0 until str.length) {
+            if (next) {
+                next = false
+                continue
+            }
+            when {
+                str[i] == '*' && str[i + 1] == '*' -> {
+                    trig = "**"
+                    next = true
+                }
+                str[i] == '*' -> trig = "*"
+                str[i] == '~' && str[i + 1] == '~' -> {
+                    trig = "~~"
+                    next = true
+                }
+                else -> trig = "-1"
+            }
+            /////////////////////////////
+            if (trig == "-1") {
+                ans.add(str[i].toString())
+                continue
+            } else {
+                if (queue.last() != trigs[trig]) {
+                    trigs[trig]?.let { queue.add(it) }
+                    ans.add("<" + trigs[trig] + ">")
+                    continue
+                } else
+                    if (queue.last() == trigs[trig]) {
+                        queue.remove(queue.last())
+                        ans.add("</" + trigs[trig] + ">")
+                        continue
+                    }
+            }
+        }
+    }
+    ans.add("</p></body></html>")
+    outputStream.write(ans.joinToString(""))
+    outputStream.close()
 }
+
 
 /**
  * Сложная
@@ -464,6 +516,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+
+
 }
 
