@@ -153,7 +153,6 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val maxSide = max(a, max(b, c))
     val twoSides = a + b + c - maxSide
-    if (maxSide >= twoSides) return -1
     val k = when (maxSide) {  // пифагор
         a -> sqr(a) - sqr(b) - sqr(c)
         b -> sqr(b) - sqr(a) - sqr(c)
@@ -162,6 +161,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     return when {
         k < 0.0 -> 0
         k == 0.0 -> 1
+        maxSide >= twoSides -> -1
         else -> 2
     }
 }
