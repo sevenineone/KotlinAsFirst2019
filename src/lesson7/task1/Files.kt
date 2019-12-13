@@ -299,7 +299,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
     val outputStream = File(outputName).bufferedWriter()
     val ans = mutableListOf<String>()
-    val queue = mutableListOf<Char>('0')
+    val queue = mutableListOf('0')
     val trigs = mapOf("*" to 'i', "**" to 'b', "~~" to 's')
     var trig = ""
     var next = false
