@@ -180,14 +180,14 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val all_price = mutableMapOf<String, Double>()
+    val allPrice = mutableMapOf<String, Double>()
     val number = mutableMapOf<String, Double>()
     val ans = mutableMapOf<String, Double>()
     for ((name, price) in stockPrices) {
-        all_price[name] = all_price.getOrDefault(name, 0.0) + price
+        allPrice[name] = allPrice.getOrDefault(name, 0.0) + price
         number[name] = number.getOrDefault(name, 0.0) + 1
     }
-    for ((name, price) in all_price) ans[name] = price / number[name]!!
+    for ((name, price) in allPrice) ans[name] = price / number[name]!!
     return ans
 }
 
@@ -300,14 +300,15 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    var ans = Pair(-1, -1)
-    for (i in 0 until list.size - 1)
-        for (j in i + 1 until list.size) {
-            if ((list[i] + list[j]) == number) {
-                ans = Pair(i, j); break
-            }
-        }
-    return ans
+    val lasts = mutableMapOf<Int, Int>()
+    var num = 0
+    for (i in 0 until list.size) {
+        num = number - list[i]
+        if (num !in lasts)
+            lasts[list[i]] = i
+        else return Pair(lasts[num]!!, i)
+    }
+    return Pair(-1, -1)
 }
 
 /**
@@ -334,18 +335,18 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     //мое решение задачи сделанное в 2016 году на Летней Олимпиадной Школе от МфТИ. Переписал с c++.
     val ans = mutableSetOf<String>()
-    val rs_tbl = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
+    val rsTbl = Array(treasures.size + 1) { Array(capacity + 1) { 0 } }
     for (k in 1 until treasures.size + 1) {
         for (m in 0 until capacity + 1) {
             val pr = treasures.getValue(treasures.keys.elementAt(k - 1))
             if (pr.first <= m)
-                rs_tbl[k][m] = max(rs_tbl[k - 1][m - pr.first] + pr.second, rs_tbl[k - 1][m])
-            else rs_tbl[k][m] = rs_tbl[k - 1][m]
+                rsTbl[k][m] = max(rsTbl[k - 1][m - pr.first] + pr.second, rsTbl[k - 1][m])
+            else rsTbl[k][m] = rsTbl[k - 1][m]
         }
     }
     var mw = capacity
     for (k in treasures.size downTo 1) {
-        if (rs_tbl[k - 1][mw] != rs_tbl[k][mw]) {
+        if (rsTbl[k - 1][mw] != rsTbl[k][mw]) {
             ans.add(treasures.keys.elementAt(k - 1))
             mw -= treasures.getValue(treasures.keys.elementAt(k - 1)).first
         }
