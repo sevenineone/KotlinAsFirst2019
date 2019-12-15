@@ -168,10 +168,9 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
-    var ans: Int = p[0]
-    var d: Int = x
-    for (i in 1 until p.size) {
+    var ans: Int = 0
+    var d = 1
+    for (i in 0 until p.size) {
         ans += p[i] * d
         d *= x
     }
@@ -189,9 +188,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
-    var a = list[0]
-    for (i in 1 until list.size) {
+    var a = 0
+    for (i in 0 until list.size) {
         list[i] += a
         a = list[i]
     }
@@ -207,11 +205,14 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     val ans = mutableListOf<Int>()
+    var m = minDivisor(n)
     var a = n
     while (a > 1) {
-        val m = minDivisor(a)
-        ans.add(m)
-        a /= m
+        while (a % m == 0) {
+            ans.add(m)
+            a /= m
+        }
+        m++
     }
     return ans
 }
@@ -223,18 +224,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var a = n
-    var m = minDivisor(a)
-    var ans = "$m"
-    a = n / minDivisor(a)
-    while (a > 1) {
-        m = minDivisor(a)
-        ans += "*$m"
-        a /= m
-    }
-    return ans
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
 
 /**
  * Средняя
@@ -249,10 +239,10 @@ fun convert(n: Int, base: Int): List<Int> { // reverse???
     val ans = mutableListOf<Int>()
     while (a > 0) {
         r = a % base
-        ans.add(0, r)
+        ans.add(r)
         a /= base
     }
-    return ans
+    return ans.reversed()
 }
 
 /**
@@ -268,14 +258,14 @@ fun convert(n: Int, base: Int): List<Int> { // reverse???
  */
 fun convertToString(n: Int, base: Int): String {
     val list = convert(n, base)
-    var ans = ""
+    val ans = mutableListOf<Any>()
     for (i in list) {
         if (i < 10)
-            ans += i.toString()
+            ans.add(i)
         else
-            ans += ('a' + i - 10).toString() // ascii
+            ans.add(('a' + i - 10)) // ascii
     }
-    return ans
+    return ans.joinToString("")
 }
 
 /**
@@ -308,18 +298,12 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int {
-    var ans = 0
-    var num: Int
-    var c = 1
-    for (i in str.reversed()) {
-        if (i.isDigit()) num = i.toInt() - '0'.toInt()
-        else num = i.toInt() - 'a'.toInt() + 10 // c 3 1 // 12
-        ans += num * c
-        c *= base
-    }
-    return ans
-}
+fun decimalFromString(str: String, base: Int): Int = decimal(str.map {
+    if (it in '0'..'9')
+        it - '0'
+    else
+        it - 'a' + 10
+}, base)
 
 /**
  * Сложная
@@ -330,17 +314,30 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val rom_table = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
-    val digit_table = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
-    var ans = ""
+    val tableRomAndDigit = listOf(
+        Pair("M", 1000),
+        Pair("CM", 900),
+        Pair("D", 500),
+        Pair("CD", 400),
+        Pair("C", 100),
+        Pair("XC", 90),
+        Pair("L", 50),
+        Pair("XL", 40),
+        Pair("X", 10),
+        Pair("IX", 9),
+        Pair("V", 5),
+        Pair("IV", 4),
+        Pair("I", 1)
+    )
+    val ans = mutableListOf<String>()
     var N = n
-    for (i in 0..12) {
-        while (digit_table[i] <= N) {
-            N -= digit_table[i]
-            ans += rom_table[i]
+    for (i in tableRomAndDigit) {
+        while (i.second <= N) {
+            N -= i.second
+            ans.add(i.first)
         }
     }
-    return ans
+    return ans.joinToString("")
 }
 
 /**
@@ -351,7 +348,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    val table_1_to_9 = listOf(
+    val table1To9 = listOf(
         "",
         "один",
         "два",
@@ -363,7 +360,7 @@ fun russian(n: Int): String {
         "восемь",
         "девять"
     )
-    val table_of_hundreds = listOf(
+    val tableOfHundreds = listOf(
         "",
         "сто ",
         "двести ",
@@ -375,7 +372,7 @@ fun russian(n: Int): String {
         "восемьсот ",
         "девятьсот "
     )
-    val table_10_to_19 = listOf(
+    val table10To19 = listOf(
         "десять ",
         "одиннадцать ",
         "двенадцать ",
@@ -387,7 +384,7 @@ fun russian(n: Int): String {
         "восемнадцать ",
         "девятнадцать "
     )
-    val table_20_to_90 = listOf(
+    val table20To90 = listOf(
         "",
         "",
         "двадцать ",
@@ -399,7 +396,7 @@ fun russian(n: Int): String {
         "восемьдесят ",
         "девяносто "
     )
-    val table_of_thousands = listOf(
+    val tableOfThousands = listOf(
         "тысяч ",
         "одна тысяча ",
         "две тысячи ",
@@ -412,26 +409,38 @@ fun russian(n: Int): String {
         "девять тысяч "
     )
 
-    val digits = mutableListOf(0, 0, 0, 0, 0, 0)
-    var ans = ""
-    var i = 5
+    val digits = mutableListOf<Int>()
+    var ans = mutableListOf<String>()
+    var i = 6
     var N = n
-    while (N > 0) {
-        digits[i] = N % 10
-        N /= 10
+    while (i > 0) {
+        if (N != 0) {
+            digits.add(0, N % 10)
+            N /= 10
+        } else
+            digits.add(0, 0)
         i--
     }
 
     if (n >= 1000)
         if (digits[1] == 1)
-            ans = ans + table_of_hundreds[digits[0]] + table_10_to_19[digits[2]] + table_of_thousands[0]
-        else
-            ans = ans + table_of_hundreds[digits[0]] + table_20_to_90[digits[1]] + table_of_thousands[digits[2]]
+        {
+            ans.add(tableOfHundreds[digits[0]])
+            ans.add(table10To19[digits[2]])
+            ans.add(tableOfThousands[0])
+        } else {
+            ans.add(tableOfHundreds[digits[0]])
+            ans.add(table20To90[digits[1]])
+            ans.add(tableOfThousands[digits[2]])
+        }
 
-    if (digits[4] == 1)
-        ans = ans + table_of_hundreds[digits[3]] + table_10_to_19[digits[5]]
-    else
-        ans = ans + table_of_hundreds[digits[3]] + table_20_to_90[digits[4]] + table_1_to_9[digits[5]]
-
-    return ans.trim()
+    if (digits[4] == 1) {
+        ans.add(tableOfHundreds[digits[3]])
+        ans.add(table10To19[digits[5]])
+    } else {
+        ans.add(tableOfHundreds[digits[3]])
+        ans.add(table20To90[digits[4]])
+        ans.add(table1To9[digits[5]])
+    }
+    return ans.joinToString("").trim()
 }
