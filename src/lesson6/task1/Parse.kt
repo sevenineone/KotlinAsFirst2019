@@ -91,7 +91,7 @@ val month = listOf(
 )
 
 fun dateStrToDigit(str: String): String {
-    val d = str.split(' ')
+    val d = Regex("""[\s]+""").split(str)
     return if (d.size != 3 || d[1] !in month || d[0].toInt() > daysInMonth(month.indexOf(d[1]), d[2].toInt()))
         ""
     else
@@ -172,18 +172,18 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1
  */
 fun bestHighJump(jumps: String): Int {
-    return if (!jumps.matches(Regex("""[-+0-9%\s]+""")) || !jumps.contains(Regex("""[0-9]+\s\+""")))
-        -1
-    else {
-        val anss = Regex("""[0-9]+\s\+""").findAll(jumps).toList().map { it.value }
-        var mx = -1
-        for (i in anss) {
-            var s = i
-            s = s.replace(" +", "")
-            if (mx < s.toInt()) mx = s.toInt()
-        }
-        mx
+    if (!jumps.matches(Regex("""([0-9]+ [%]*[-+])( [0-9]+ [%]*[-+])*( [0-9]+ [%]*)*""")))
+        return -1
+
+    val anss = Regex("""[0-9]+\s\+""").findAll(jumps).toList().map { it.value }
+    var mx = -1
+    for (i in anss) {
+        var s = i
+        s = s.replace(" +", "")
+        if (mx < s.toInt()) mx = s.toInt()
     }
+    return mx
+
 }
 
 /**
@@ -198,16 +198,16 @@ fun bestHighJump(jumps: String): Int {
 fun plusMinus(expression: String): Int {
     if (!expression.matches(Regex("""(([0-9]+\s[-+]\s)*)([0-9]+)""")))
         throw IllegalArgumentException("Description")
-    else {
-        val numsWithSigns = expression.split(" ")
-        var ans = numsWithSigns[0].toInt()
-        for (i in 1 until numsWithSigns.size step 2) {
-            if (numsWithSigns[i] == "+") {
-                ans += numsWithSigns[i + 1].toInt()
-            } else ans -= numsWithSigns[i + 1].toInt()
-        }
-        return ans
+
+    val numsWithSigns = expression.split(" ")
+    var ans = numsWithSigns[0].toInt()
+    for (i in 1 until numsWithSigns.size step 2) {
+        if (numsWithSigns[i] == "+") {
+            ans += numsWithSigns[i + 1].toInt()
+        } else ans -= numsWithSigns[i + 1].toInt()
     }
+    return ans
+
 }
 
 /**
