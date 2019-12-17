@@ -306,7 +306,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var i = 0
     ans.add("<html><body><p>")
     for (str in text) {
-        if (str.isEmpty()) {
+        if (str == "") {
             ans.add("</p><p>")
             continue
         }
