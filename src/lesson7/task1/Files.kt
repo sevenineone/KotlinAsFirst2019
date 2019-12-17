@@ -296,7 +296,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val text = File(inputName).readText().split(Regex("""[\r]*\n[\r]*\n"""))
+    val text = File(inputName).readText().split(Regex("""([\r]*\n[\r]*\n)+"""))
     val outputStream = File(outputName).bufferedWriter()
     val ans = mutableListOf<String>()
     var iTrig = false
