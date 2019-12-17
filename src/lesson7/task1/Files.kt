@@ -299,49 +299,52 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val text = File(inputName).readLines()
     val outputStream = File(outputName).bufferedWriter()
     val ans = mutableListOf<String>()
-    val queue = mutableListOf('0')
+    var iTrig = false
+    var bTrig = false
+    var sTrig = false
     val trigs = mapOf("*" to 'i', "**" to 'b', "~~" to 's')
-    var trig = ""
-    var next = false
+    var i = 0
     ans.add("<html><body><p>")
     for (str in text) {
         if (str.isEmpty()) {
             ans.add("</p><p>")
             continue
         }
-        for (i in 0 until str.length) {
-            if (next) {
-                next = false
-                continue
-            }
-            when {
-                str[i] == '*' && str[i + 1] == '*' -> {
-                    trig = "**"
-                    next = true
+        i = 0
+        while (i < str.length) {
+            if (str[i] == '*' && str[i + 1] == '*') {
+                if (bTrig) {
+                    ans.add("</b>")
+                    bTrig = false
+                } else {
+                    ans.add("<b>")
+                    bTrig = true
                 }
-                str[i] == '*' -> trig = "*"
-                str[i] == '~' && str[i + 1] == '~' -> {
-                    trig = "~~"
-                    next = true
-                }
-                else -> trig = "-1"
-            }
-            /////////////////////////////
-            if (trig == "-1") {
-                ans.add(str[i].toString())
-                continue
-            } else {
-                if (queue.last() != trigs[trig]) {
-                    trigs[trig]?.let { queue.add(it) }
-                    ans.add("<" + trigs[trig] + ">")
-                    continue
-                } else
-                    if (queue.last() == trigs[trig]) {
-                        queue.remove(queue.last())
-                        ans.add("</" + trigs[trig] + ">")
-                        continue
+                i += 2
+            } else
+                if (str[i] == '*') {
+                    if (iTrig) {
+                        ans.add("</i>")
+                        iTrig = false
+                    } else {
+                        ans.add("<i>")
+                        iTrig = true
                     }
-            }
+                    i++
+                } else
+                    if (str[i] == '~' && str[i + 1] == '~') {
+                        if (sTrig) {
+                            ans.add("</s>")
+                            sTrig = false
+                        } else {
+                            ans.add("<s>")
+                            sTrig = true
+                        }
+                        i += 2
+                    } else {
+                        ans.add(str[i].toString())
+                        i++
+                    }
         }
     }
     ans.add("</p></body></html>")
