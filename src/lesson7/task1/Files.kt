@@ -57,7 +57,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val text = File(inputName).readText().toLowerCase()
     val ans = mutableMapOf<String, Int>()
     var name: String
-    var place = 0
+    var place: Int
     for (i in substrings) ans += Pair(i, -1)
     for (i in substrings) {
         if (ans[i] != -1) continue
@@ -296,49 +296,45 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 
 
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val text = File(inputName).readLines()
+    val text = File(inputName).readText().split(Regex("""[\r]*\n[\r]*\n"""))
     val outputStream = File(outputName).bufferedWriter()
     val ans = mutableListOf<String>()
     var iTrig = false
     var bTrig = false
     var sTrig = false
-    val trigs = mapOf("*" to 'i', "**" to 'b', "~~" to 's')
-    var i = 0
-    ans.add("<html><body><p>")
+    var i: Int
+    ans.add("<html><body>")
     for (str in text) {
-        if (str == "") {
-            ans.add("</p><p>")
-            continue
-        }
+        ans.add("<p>")
         i = 0
         while (i < str.length) {
             if (str[i] == '*' && str[i + 1] == '*') {
-                if (bTrig) {
+                bTrig = if (bTrig) {
                     ans.add("</b>")
-                    bTrig = false
+                    false
                 } else {
                     ans.add("<b>")
-                    bTrig = true
+                    true
                 }
                 i += 2
             } else
                 if (str[i] == '*') {
-                    if (iTrig) {
+                    iTrig = if (iTrig) {
                         ans.add("</i>")
-                        iTrig = false
+                        false
                     } else {
                         ans.add("<i>")
-                        iTrig = true
+                        true
                     }
                     i++
                 } else
                     if (str[i] == '~' && str[i + 1] == '~') {
-                        if (sTrig) {
+                        sTrig = if (sTrig) {
                             ans.add("</s>")
-                            sTrig = false
+                            false
                         } else {
                             ans.add("<s>")
-                            sTrig = true
+                            true
                         }
                         i += 2
                     } else {
@@ -346,8 +342,9 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         i++
                     }
         }
+        ans.add("</p>")
     }
-    ans.add("</p></body></html>")
+    ans.add("</body></html>")
     outputStream.write(ans.joinToString(""))
     outputStream.close()
 }
