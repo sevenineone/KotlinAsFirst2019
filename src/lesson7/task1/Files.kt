@@ -307,7 +307,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (str in text) {
         ans.add("<p>")
         i = 0
-        while (i < str.length) {
+        while (i < str.length - 1) {
             if (str[i] == '*' && str[i + 1] == '*') {
                 bTrig = if (bTrig) {
                     ans.add("</b>")
@@ -342,6 +342,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         i++
                     }
         }
+        ans.add(str[str.length - 1].toString())
         ans.add("</p>")
     }
     ans.add("</body></html>")
