@@ -308,16 +308,28 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         ans.add("<p>")
         i = 0
         while (i < str.length) {
-            if (str[i] == '*' && str[i + 1] == '*') {
-                bTrig = if (bTrig) {
-                    ans.add("</b>")
-                    false
-                } else {
-                    ans.add("<b>")
-                    true
-                }
-                i += 2
-                continue
+            if (i + 1 < str.length) {
+                if (str[i] == '*' && str[i + 1] == '*') {
+                    bTrig = if (bTrig) {
+                        ans.add("</b>")
+                        false
+                    } else {
+                        ans.add("<b>")
+                        true
+                    }
+                    i += 2
+                } else
+                    if (str[i] == '~' && str[i + 1] == '~') {
+                        sTrig = if (sTrig) {
+                            ans.add("</s>")
+                            false
+                        } else {
+                            ans.add("<s>")
+                            true
+                        }
+                        i += 2
+                    }
+
             }
             if (str[i] == '*') {
                 iTrig = if (iTrig) {
@@ -328,21 +340,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     true
                 }
                 i++
-                continue
+            } else {
+                ans.add(str[i].toString())
+                i++
             }
-            if (str[i] == '~' && str[i + 1] == '~') {
-                sTrig = if (sTrig) {
-                    ans.add("</s>")
-                    false
-                } else {
-                    ans.add("<s>")
-                    true
-                }
-                i += 2
-                continue
-            }
-            ans.add(str[i].toString())
-            i++
         }
 
         ans.add("</p>")
