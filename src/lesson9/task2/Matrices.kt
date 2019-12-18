@@ -76,7 +76,26 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateRectangles(height: Int, width: Int): Matrix<Int> {
+    var matrix = createMatrix(height, width, 1)
+    var h = height - 1
+    var w = width - 1
+    var i = 1
+    var j = 1
+    var num = 2
+    while (i < h){
+        while (j < w){
+            matrix[i, j] = num
+        }
+        h--
+        w--
+        i++
+        j++
+        num++
+    }
+    return matrix
+}
+
 
 /**
  * Сложная
