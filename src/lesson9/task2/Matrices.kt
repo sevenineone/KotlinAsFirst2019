@@ -77,16 +77,15 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  1  1  1  1  1
  */
 fun generateRectangles(height: Int, width: Int): Matrix<Int> {
-    var matrix = createMatrix(height, width, 1)
+    val matrix = createMatrix(height, width, 1)
     var startH = 1
     var startW = 1
     var endH = height - 1
-    var endW = height - 1
-
+    var endW = width - 1
     var num = 2
-    while (num < width / 2){
-        for (i in startH until endH){
-            for (j in startW until endW){
+    while (startH < endH && startW < endW) {
+        for (i in startH until endH) {
+            for (j in startW until endW) {
                 matrix[i, j] = num
             }
         }
