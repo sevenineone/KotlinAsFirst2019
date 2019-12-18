@@ -63,36 +63,36 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
 fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     val matrix = createMatrix(height, width, 1)
     var right = width - 1
-    var left = 1
-    var up = 1
+    var left = 0
+    var up = 0
     var down = height - 1
     var count = 1
     var i = 1
     var j = 0
     while (true) {
         if (count == height * width) break
-        while (i < right) {
+        while (i <= right) {
             matrix[i, j] = count
             count++
             i++
         }
         right--
         if (count == height * width) break
-        while (j < down) {
+        while (j <= down) {
             matrix[i, j] = count
             count++
             j++
         }
         down--
         if (count == height * width) break
-        while (i > left) {
+        while (i >= left) {
             matrix[i, j] = count
             count++
             i--
         }
         left++
         if (count == height * width) break
-        while (i > up) {
+        while (i >= up) {
             matrix[i, j] = count
             count++
             j--
