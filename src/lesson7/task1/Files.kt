@@ -308,42 +308,42 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         ans.add("<p>")
         i = 0
         while (i < str.length) {
-            if (i + 1 < str.length) {
-                if (str[i] == '*' && str[i + 1] == '*') {
-                    bTrig = if (bTrig) {
-                        ans.add("</b>")
+            if (i + 1 < str.length && str[i] == '*' && str[i + 1] == '*') {
+                bTrig = if (bTrig) {
+                    ans.add("</b>")
+                    false
+                } else {
+                    ans.add("<b>")
+                    true
+                }
+                i += 2
+                continue
+            } else
+                if (i + 1 < str.length && str[i] == '~' && str[i + 1] == '~') {
+                    sTrig = if (sTrig) {
+                        ans.add("</s>")
                         false
                     } else {
-                        ans.add("<b>")
+                        ans.add("<s>")
                         true
                     }
                     i += 2
+                    continue
                 } else
-                    if (str[i] == '~' && str[i + 1] == '~') {
-                        sTrig = if (sTrig) {
-                            ans.add("</s>")
+                    if (str[i] == '*') {
+                        iTrig = if (iTrig) {
+                            ans.add("</i>")
                             false
                         } else {
-                            ans.add("<s>")
+                            ans.add("<i>")
                             true
                         }
-                        i += 2
+                        i++
+                        continue
+                    } else {
+                        ans.add(str[i].toString())
+                        i++
                     }
-
-            }
-            if (str[i] == '*') {
-                iTrig = if (iTrig) {
-                    ans.add("</i>")
-                    false
-                } else {
-                    ans.add("<i>")
-                    true
-                }
-                i++
-            } else {
-                ans.add(str[i].toString())
-                i++
-            }
         }
 
         ans.add("</p>")
