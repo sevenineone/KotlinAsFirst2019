@@ -307,7 +307,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (str in text) {
         ans.add("<p>")
         i = 0
-        while (i < str.length - 1) {
+        while (i < str.length) {
             if (str[i] == '*' && str[i + 1] == '*') {
                 bTrig = if (bTrig) {
                     ans.add("</b>")
@@ -317,32 +317,34 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     true
                 }
                 i += 2
-            } else
-                if (str[i] == '*') {
-                    iTrig = if (iTrig) {
-                        ans.add("</i>")
-                        false
-                    } else {
-                        ans.add("<i>")
-                        true
-                    }
-                    i++
-                } else
-                    if (str[i] == '~' && str[i + 1] == '~') {
-                        sTrig = if (sTrig) {
-                            ans.add("</s>")
-                            false
-                        } else {
-                            ans.add("<s>")
-                            true
-                        }
-                        i += 2
-                    } else {
-                        ans.add(str[i].toString())
-                        i++
-                    }
+                continue
+            }
+            if (str[i] == '*') {
+                iTrig = if (iTrig) {
+                    ans.add("</i>")
+                    false
+                } else {
+                    ans.add("<i>")
+                    true
+                }
+                i++
+                continue
+            }
+            if (str[i] == '~' && str[i + 1] == '~') {
+                sTrig = if (sTrig) {
+                    ans.add("</s>")
+                    false
+                } else {
+                    ans.add("<s>")
+                    true
+                }
+                i += 2
+                continue
+            }
+            ans.add(str[i].toString())
+            i++
         }
-        ans.add(str[str.length - 1].toString())
+
         ans.add("</p>")
     }
     ans.add("</body></html>")
@@ -517,7 +519,6 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-
-
+    TODO()
 }
 
