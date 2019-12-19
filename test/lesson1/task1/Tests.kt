@@ -1,6 +1,7 @@
 package lesson1.task1
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import kotlin.math.PI
@@ -104,5 +105,23 @@ class Tests {
     fun numberRevert() {
         assertEquals(874, numberRevert(478))
         assertEquals(201, numberRevert(102))
+    }
+
+    @Test
+    @Tag("Easy")
+    fun muFun() {
+        val t = listOf(
+            Pair(1, 5000.0),
+            Pair(2, 1000.0),
+            Pair(1, 500.0),
+            Pair(1, 100.0),
+            Pair(3, 10.0),
+            Pair(1, 2.0),
+            Pair(1, 1.0),
+            Pair(2, 0.1),
+            Pair(1, 0.01)
+        )
+        assertEquals(t, myFun(7633.21, "5000, 1000, 500, 100, 50, 10, 5, 2, 1, 0.50, 0.10, 0.05, 0.01"))
+        assertThrows(IllegalArgumentException::class.java) { myFun(123.0, "12,4 , 45'6")}
     }
 }

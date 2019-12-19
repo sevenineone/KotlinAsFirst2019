@@ -2,7 +2,9 @@
 
 package lesson1.task1
 
+
 import kotlin.math.*
+
 
 /**
  * Пример
@@ -128,3 +130,26 @@ fun accountInThreeYears(initial: Int, percent: Int): Double =
  */
 fun numberRevert(number: Int): Int =
     number / 100 + number / 10 % 10 * 10 + number % 10 * 100
+
+//////////////////////////////////////////////////////////
+
+fun myFun (sum: Double, coins: String) :List<Pair<Int, Double>> {
+    require(coins.matches(Regex("""[0-9]+(\.[0-9]{1,2})?(, [0-9]+(\.[0-9]{1,2})?)*""")))
+    val ans = mutableListOf<Pair<Int, Double>>()
+    val coinsInt = coins.split(", ").map { it.toDouble() }
+    var i = 0
+    var trigSum = sum
+    while(trigSum > 0 && i < coinsInt.size){
+        if (coinsInt[i] > trigSum) i++
+        else{
+            var num = 0
+            while (coinsInt[i] < trigSum){
+                trigSum -= coinsInt[i]
+                num++
+            }
+            ans.add(Pair(num, coinsInt[i]))
+            i++
+        }
+    }
+    return ans
+}
